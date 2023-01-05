@@ -18,7 +18,7 @@ const Product = newSeq.define("product", {
     }
 });
 
-newSeq.sync({ alter: true }).then(() => {
+newSeq.sync().then(() => {
     console.log('Product table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);

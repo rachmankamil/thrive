@@ -1,6 +1,5 @@
 import { DataTypes } from "sequelize";
 import { newSeq } from "../configs/database.js";
-import Product from "../product/product.model.js";
 
 const Users = newSeq.define("users", {
     username: {
@@ -12,7 +11,7 @@ const Users = newSeq.define("users", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    dateOfBirth: {
+    dob: {
         type: DataTypes.DATEONLY,
     },
     address: {
@@ -29,14 +28,50 @@ const Users = newSeq.define("users", {
     education:{
         type: DataTypes.STRING(150),
         allowNull: false
-    
+    },
+    phone:{
+        type:DataTypes.STRING(20),
     }
+},{
+    paranoid: true //soft-delete
 });
 
-newSeq.sync({ alter: true }).then(() => {
+newSeq.sync().then(() => {
     console.log('Users table created successfully!');
 }).catch((error) => {
     console.error('Unable to create table : ', error);
 });
+
+export const createUser = ( async (un, pw, dob, add, gn, ed, ph) => {
+    const create = await Users.create({
+        username: un,
+        password: pw,
+        dob: dob,
+        address: add,
+        status: true,
+        gender: gn,
+        education: ed,
+        phone: ph
+    })
+    console.log(un,"'s id : ", create.id);
+    return create.id
+})
+
+export const getUserbyId = (async (id) => {
+    const allUser = await Users.findOne({
+        where:{
+            id: id
+        }
+    })
+    return allUser
+})
+
+export const deleteUser = ((id) => {
+    Users.destroy({
+        where:{
+            id: id
+        }
+    })
+})
  
 export default Users
