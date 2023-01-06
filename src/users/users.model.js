@@ -66,6 +66,15 @@ export const getUserbyId = (async (id) => {
     return allUser
 })
 
+export const getUserbyUsername = (async (un) => {
+    const allUser = await Users.findOne({
+        where:{
+            username: un
+        }
+    })
+    return allUser
+})
+
 export const deleteUser = ((id) => {
     Users.destroy({
         where:{
